@@ -219,7 +219,7 @@ function AppContent() {
       
       <div className="main-container">
         <div className="layout-container">
-          <div className="top-section" style={{ height: `calc(100% - ${terminalHeight}px)` }}>
+          <div className="top-section">
             <div 
               className={`file-explorer ${sidebarCollapsed ? 'collapsed' : ''}`}
               style={{ width: `${sidebarWidth}px` }}
@@ -343,7 +343,7 @@ function AppContent() {
           </div>
           
           
-          <div className={`terminal-section ${terminalCollapsed ? 'collapsed' : ''}`} style={{ height: `${terminalHeight}px` }}>
+          <div className={`terminal-section ${terminalCollapsed ? 'collapsed' : ''}`}>
             <div className="run-button-container">
               <button 
                 onClick={runCode} 

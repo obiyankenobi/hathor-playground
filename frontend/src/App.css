@@ -121,6 +121,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Layout containers */
@@ -128,11 +129,12 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex: 1;
 }
 
 .top-section {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
 }
@@ -416,14 +418,14 @@ body {
   flex-direction: column;
   background-color: var(--terminal-bg);
   border-top: 1px solid var(--border-color);
-  min-height: 100px;
-  max-height: 500px;
-  transition: height 0.3s ease;
+  flex: 0 0 300px;
+  min-height: 0;
+  transition: flex-basis 0.3s ease;
+  overflow: hidden;
 }
 
 .terminal-section.collapsed {
-  min-height: 50px;
-  max-height: 50px;
+  flex: 0 0 50px;
 }
 
 .run-button-container {
@@ -469,7 +471,7 @@ body {
   font-size: 13px;
   line-height: 1.4;
   overflow-y: auto;
-  min-height: 200px;
+  min-height: 0;
 }
 
 .terminal-output pre {
