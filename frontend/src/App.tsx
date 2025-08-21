@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import './App.css';
+import { ThemeProvider, useTheme } from './ThemeContext';
+import ThemeDropdown from './ThemeDropdown';
 
 interface Entry {
   id: string;
@@ -9,7 +11,8 @@ interface Entry {
   testCode: string;
 }
 
-function App() {
+function AppContent() {
+  const { theme } = useTheme();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'contract' | 'tests'>('contract');
@@ -152,8 +155,13 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="header-content">
-          <img src="/logo.svg" alt="Hathor Playground Logo" className="logo" />
-          <h1>Hathor Playground</h1>
+          <div className="header-left">
+            <img src="/logo.svg" alt="Hathor Playground Logo" className="logo" />
+            <h1>Hathor Playground</h1>
+          </div>
+          <div className="header-right">
+            <ThemeDropdown />
+          </div>
         </div>
       </header>
       
@@ -221,7 +229,7 @@ function App() {
                 <Editor
                   height="100%"
                   language="python"
-                  theme="vs-dark"
+                  theme={theme === 'dark' ? 'vs-dark' : 'light'}
                   value={currentCode}
                   onChange={(value) => updateCode(value || '')}
                   options={{
@@ -257,6 +265,14 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
