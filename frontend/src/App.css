@@ -134,6 +134,7 @@ body {
   display: flex;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 /* File explorer */
@@ -142,9 +143,13 @@ body {
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  min-height: 100%;
-  min-width: 200px;
-  max-width: 600px;
+  height: 100%;
+  flex-shrink: 0;
+  transition: width 0.3s ease;
+}
+
+.file-explorer.collapsed {
+  width: 40px;
 }
 
 .file-explorer-header {
@@ -153,10 +158,15 @@ body {
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   font-weight: 600;
   font-size: 14px;
   color: var(--text-primary);
+}
+
+.file-explorer.collapsed .file-explorer-header {
+  justify-content: center;
+  padding: 8px 4px;
 }
 
 
@@ -327,12 +337,41 @@ body {
   background-color: var(--success-hover);
 }
 
+/* Collapse buttons */
+.collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.collapse-btn:hover {
+  background-color: var(--button-hover);
+  color: var(--text-primary);
+}
+
+.sidebar-collapse-btn {
+  font-weight: bold;
+}
+
+.terminal-collapse-btn {
+  margin-left: 12px;
+  font-size: 14px;
+}
+
 /* Code editor panel */
 .code-editor-panel {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .tabs-header {
@@ -379,12 +418,25 @@ body {
   border-top: 1px solid var(--border-color);
   min-height: 100px;
   max-height: 500px;
+  transition: height 0.3s ease;
+}
+
+.terminal-section.collapsed {
+  min-height: 50px;
+  max-height: 50px;
 }
 
 .run-button-container {
   background-color: var(--bg-tertiary);
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.terminal-section.collapsed .run-button-container {
+  border-bottom: none;
 }
 
 .run-button {

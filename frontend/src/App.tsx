@@ -20,8 +20,10 @@ function AppContent() {
   const [isRunning, setIsRunning] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
-  const sidebarWidth = 250;
-  const terminalHeight = 300;
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [terminalCollapsed, setTerminalCollapsed] = useState(false);
+  const sidebarWidth = sidebarCollapsed ? 40 : 200;
+  const terminalHeight = terminalCollapsed ? 50 : 300;
 
   // Load entries from localStorage on component mount
   useEffect(() => {
@@ -142,6 +144,14 @@ function AppContent() {
     ));
   };
 
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  const toggleTerminal = () => {
+    setTerminalCollapsed(!terminalCollapsed);
+  };
+
   const updateCode = (code: string) => {
     if (!selectedEntry) return;
     
@@ -157,6 +167,11 @@ function AppContent() {
     
     const entry = entries.find(e => e.id === selectedEntry);
     if (!entry) return;
+
+    // Expand terminal when running code
+    if (terminalCollapsed) {
+      setTerminalCollapsed(false);
+    }
 
     setIsRunning(true);
     setTerminalOutput('Running...\n');
@@ -206,15 +221,23 @@ function AppContent() {
         <div className="layout-container">
           <div className="top-section" style={{ height: `calc(100% - ${terminalHeight}px)` }}>
             <div 
-              className="file-explorer"
+              className={`file-explorer ${sidebarCollapsed ? 'collapsed' : ''}`}
               style={{ width: `${sidebarWidth}px` }}
             >
               <div className="file-explorer-header">
-                <span>Files</span>
+                {!sidebarCollapsed && <span>Files</span>}
+                <button 
+                  className="collapse-btn sidebar-collapse-btn"
+                  onClick={toggleSidebar}
+                  title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                >
+                  {sidebarCollapsed ? '»' : '«'}
+                </button>
               </div>
               
-              <div className="entries-list">
-                {entries.map(entry => (
+              {!sidebarCollapsed && (
+                <div className="entries-list">
+                  {entries.map(entry => (
                   <div
                     key={entry.id}
                     className={`entry-item ${selectedEntry === entry.id ? 'selected' : ''}`}
@@ -270,12 +293,15 @@ function AppContent() {
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
               
-              <button onClick={createEntry} className="create-entry-btn">
-                + New Contract
-              </button>
+              {!sidebarCollapsed && (
+                <button onClick={createEntry} className="create-entry-btn">
+                  + New Contract
+                </button>
+              )}
             </div>
             
             
@@ -317,7 +343,7 @@ function AppContent() {
           </div>
           
           
-          <div className="terminal-section" style={{ height: `${terminalHeight}px` }}>
+          <div className={`terminal-section ${terminalCollapsed ? 'collapsed' : ''}`} style={{ height: `${terminalHeight}px` }}>
             <div className="run-button-container">
               <button 
                 onClick={runCode} 
@@ -326,11 +352,21 @@ function AppContent() {
               >
                 {isRunning ? 'Running...' : 'RUN CODE'}
               </button>
+              
+              <button 
+                className="collapse-btn terminal-collapse-btn"
+                onClick={toggleTerminal}
+                title={terminalCollapsed ? 'Expand terminal' : 'Collapse terminal'}
+              >
+                {terminalCollapsed ? '⌃' : '⌄'}
+              </button>
             </div>
             
-            <div className="terminal-output">
-              <pre>{terminalOutput}</pre>
-            </div>
+            {!terminalCollapsed && (
+              <div className="terminal-output">
+                <pre>{terminalOutput}</pre>
+              </div>
+            )}
           </div>
         </div>
       </div>
