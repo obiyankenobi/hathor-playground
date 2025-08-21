@@ -23,7 +23,7 @@ function AppContent() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [terminalCollapsed, setTerminalCollapsed] = useState(false);
   const sidebarWidth = sidebarCollapsed ? 40 : 200;
-  const terminalHeight = terminalCollapsed ? 50 : 300;
+  const terminalHeight = terminalCollapsed ? 70 : 300;
 
   // Load entries from localStorage on component mount
   useEffect(() => {
@@ -354,11 +354,11 @@ function AppContent() {
               </button>
               
               <button 
-                className="collapse-btn terminal-collapse-btn"
+                className={`collapse-btn terminal-collapse-btn ${terminalCollapsed ? 'collapsed' : ''}`}
                 onClick={toggleTerminal}
                 title={terminalCollapsed ? 'Expand terminal' : 'Collapse terminal'}
               >
-                {terminalCollapsed ? '⌃' : '⌄'}
+                <div className="chevron-icon"></div>
               </button>
             </div>
             

@@ -364,6 +364,54 @@ body {
 .terminal-collapse-btn {
   margin-left: 12px;
   font-size: 14px;
+  padding: 6px;
+}
+
+/* CSS Chevron Icons */
+.chevron-icon {
+  width: 10px;
+  height: 6px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.chevron-icon::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 2px;
+  background: var(--text-secondary);
+  transform: rotate(45deg);
+  top: 2px;
+  left: 0px;
+  transition: background-color 0.15s ease;
+}
+
+.chevron-icon::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 2px;
+  background: var(--text-secondary);
+  transform: rotate(-45deg);
+  top: 2px;
+  right: 0px;
+  transition: background-color 0.15s ease;
+}
+
+.terminal-collapse-btn:hover .chevron-icon::before,
+.terminal-collapse-btn:hover .chevron-icon::after {
+  background: var(--text-primary);
+}
+
+.terminal-collapse-btn.collapsed .chevron-icon::before {
+  transform: rotate(-45deg);
+  top: 2px;
+}
+
+.terminal-collapse-btn.collapsed .chevron-icon::after {
+  transform: rotate(45deg);
+  top: 2px;
 }
 
 /* Code editor panel */
@@ -425,7 +473,7 @@ body {
 }
 
 .terminal-section.collapsed {
-  flex: 0 0 50px;
+  flex: 0 0 60px;
 }
 
 .run-button-container {
@@ -472,6 +520,25 @@ body {
   line-height: 1.4;
   overflow-y: auto;
   min-height: 0;
+}
+
+/* Terminal scrollbar styling */
+.terminal-output::-webkit-scrollbar {
+  width: 12px;
+}
+
+.terminal-output::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 6px;
+  border: 2px solid var(--terminal-bg);
+}
+
+.terminal-output::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
 }
 
 .terminal-output pre {

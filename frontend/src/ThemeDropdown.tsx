@@ -20,11 +20,11 @@ const ThemeDropdown: React.FC = () => {
   const getThemeIcon = (themeType: string) => {
     switch (themeType) {
       case 'light':
-        return '☀️';
+        return '☀';
       case 'dark':
-        return '🌙';
+        return '☾';
       default:
-        return '🌙';
+        return '☾';
     }
   };
 
@@ -62,14 +62,14 @@ const ThemeDropdown: React.FC = () => {
             className={`theme-option ${theme === 'light' ? 'active' : ''}`}
             onClick={() => handleThemeChange('light')}
           >
-            <span className="theme-icon">☀️</span>
+            <span className="theme-icon">☀</span>
             <span>Light</span>
           </button>
           <button
             className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
             onClick={() => handleThemeChange('dark')}
           >
-            <span className="theme-icon">🌙</span>
+            <span className="theme-icon">☾</span>
             <span>Dark</span>
           </button>
         </div>
