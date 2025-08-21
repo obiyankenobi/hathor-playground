@@ -151,7 +151,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Code Editor</h1>
+        <div className="header-content">
+          <img src="/logo.svg" alt="Hathor Playground Logo" className="logo" />
+          <h1>Hathor Playground</h1>
+        </div>
       </header>
       
       <div className="main-container">
