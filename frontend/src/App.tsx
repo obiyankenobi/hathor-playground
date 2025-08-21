@@ -19,6 +19,7 @@ function AppContent() {
   const [terminalOutput, setTerminalOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
   const sidebarWidth = 250;
   const terminalHeight = 300;
 
@@ -79,6 +80,33 @@ function AppContent() {
     }
   }, [activeTab, isInitialized]);
 
+  // Cancel delete confirmation on escape key or when clicking outside
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && deletingEntryId) {
+        setDeletingEntryId(null);
+      }
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (deletingEntryId) {
+        const target = event.target as HTMLElement;
+        // Don't cancel if clicking on the dropdown or delete button
+        if (!target.closest('.delete-button-container')) {
+          setDeletingEntryId(null);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [deletingEntryId]);
+
 
   const createEntry = () => {
     const newEntry: Entry = {
@@ -91,12 +119,21 @@ function AppContent() {
     setSelectedEntry(newEntry.id);
   };
 
-  const deleteEntry = (entryId: string) => {
+  const startDeleteEntry = (entryId: string) => {
+    setDeletingEntryId(entryId);
+  };
+
+  const cancelDeleteEntry = () => {
+    setDeletingEntryId(null);
+  };
+
+  const confirmDeleteEntry = (entryId: string) => {
     const updatedEntries = entries.filter(entry => entry.id !== entryId);
     setEntries(updatedEntries);
     if (selectedEntry === entryId) {
       setSelectedEntry(updatedEntries.length > 0 ? updatedEntries[0].id : null);
     }
+    setDeletingEntryId(null);
   };
 
   const renameEntry = (entryId: string, newName: string) => {
@@ -190,15 +227,48 @@ function AppContent() {
                       onBlur={(e) => e.target.blur()}
                       className="entry-name-input"
                     />
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteEntry(entry.id);
-                      }}
-                      className="delete-btn"
-                    >
-                      ×
-                    </button>
+                    <div className="delete-button-container">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startDeleteEntry(entry.id);
+                        }}
+                        className="delete-btn"
+                        title="Delete entry"
+                      >
+                        ×
+                      </button>
+                      
+                      {deletingEntryId === entry.id && (
+                        <div className="delete-dropdown">
+                          <div className="delete-dropdown-content">
+                            <div className="delete-message">
+                              Delete "{entry.name}"?
+                            </div>
+                            <div className="delete-actions">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  confirmDeleteEntry(entry.id);
+                                }}
+                                className="delete-confirm-btn"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  cancelDeleteEntry();
+                                }}
+                                className="delete-cancel-btn"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

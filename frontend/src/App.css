@@ -224,6 +224,92 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Delete button container */
+.delete-button-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Delete confirmation dropdown */
+.delete-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.delete-dropdown-content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  min-width: 200px;
+  font-size: 14px;
+}
+
+.light-theme .delete-dropdown-content {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.delete-message {
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.delete-confirm-btn {
+  background-color: #da3633;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+
+.delete-confirm-btn:hover {
+  background-color: #b92e26;
+}
+
+.delete-cancel-btn {
+  background-color: var(--button-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+
+.delete-cancel-btn:hover {
+  background-color: var(--button-hover);
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .create-entry-btn {
   margin: 8px;
   padding: 12px;
