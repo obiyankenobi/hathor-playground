@@ -27,10 +27,9 @@ app.post('/run', async (req, res) => {
     
     fs.mkdirSync(uniqueTempDir, { recursive: true });
 
-    // Replace dashes with underscores in entry name for filenames
-    const sanitizedEntryName = entryName.replace(/-/g, '_');
-    const contractFile = path.join(uniqueTempDir, `${sanitizedEntryName}_contract.py`);
-    const testFile = path.join(uniqueTempDir, `${sanitizedEntryName}_tests.py`);
+    // Use the normalized entry name (already processed on frontend)
+    const contractFile = path.join(uniqueTempDir, `${entryName}.py`);
+    const testFile = path.join(uniqueTempDir, `test.py`);
 
     fs.writeFileSync(contractFile, contractCode);
     fs.writeFileSync(testFile, testCode);
@@ -40,8 +39,56 @@ app.post('/run', async (req, res) => {
     console.log(`Test file: ${testFile}`);
     console.log(`Temporary directory: ${uniqueTempDir}`);
 
-    exec('docker run --rm hello-world', (error, stdout, stderr) => {
-      // Clean up temporary directory after Docker execution
+    // Mount files to the correct paths in the container
+    const contractMountPath = `/app/hathor/nanocontracts/blueprints/${entryName}.py`;
+    const testMountPath = '/app/tests/nanocontracts/blueprints/test.py';
+    
+    const dockerCommand = `docker run --rm ` +
+      `-v "${contractFile}:${contractMountPath}" ` +
+      `-v "${testFile}:${testMountPath}" ` +
+      `obiyankenobi/hathor-core-test-image ` +
+      `-v tests/nanocontracts/blueprints/test.py`;
+
+    console.log(`Running Docker command: ${dockerCommand}`);
+
+    exec(dockerCommand, (error, stdout, stderr) => {
+      // Save stdout and stderr to a single log file in tmp directory
+      const logFile = path.join(__dirname, 'tmp', 'docker_output.log');
+      const logContent = `
+=== Docker Execution Log ===
+Timestamp: ${new Date().toISOString()}
+Command: ${dockerCommand}
+Entry: ${entryName}
+Temp Dir: ${uniqueTempDir}
+
+=== STDOUT ===
+${stdout || '(no stdout)'}
+
+=== STDERR ===
+${stderr || '(no stderr)'}
+
+=== ERROR ===
+${error ? error.message : '(no error)'}
+
+=== END LOG ===
+
+`;
+
+      try {
+        // Ensure tmp directory exists
+        const tmpDir = path.join(__dirname, 'tmp');
+        if (!fs.existsSync(tmpDir)) {
+          fs.mkdirSync(tmpDir, { recursive: true });
+        }
+        
+        // Append to the log file
+        fs.appendFileSync(logFile, logContent);
+        console.log(`Docker output appended to: ${logFile}`);
+      } catch (logError) {
+        console.error(`Error saving log file: ${logError}`);
+      }
+
+      // Clean up the specific temporary directory after Docker execution
       const cleanup = () => {
         if (uniqueTempDir && fs.existsSync(uniqueTempDir)) {
           try {
@@ -55,23 +102,13 @@ app.post('/run', async (req, res) => {
 
       if (error) {
         console.error(`Docker error: ${error}`);
-        cleanup();
-        return res.status(500).send(`Docker execution error: ${error.message}`);
       }
       
       if (stderr) {
         console.error(`Docker stderr: ${stderr}`);
       }
 
-      const output = `Entry: ${entryName}
-Files created:
-- ${sanitizedEntryName}_contract.py
-- ${sanitizedEntryName}_tests.py
-
-Docker Output:
-${stdout}
-
-${stderr ? `Docker Stderr:\n${stderr}` : ''}`;
+      const output = `${stdout}${stderr ? `\n${stderr}` : ''}`;
 
       console.log('Docker execution completed');
       cleanup();

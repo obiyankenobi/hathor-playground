@@ -162,6 +162,11 @@ function AppContent() {
     ));
   };
 
+  // Normalize entry name for filenames
+  const normalizeEntryName = (name: string): string => {
+    return name.toLowerCase().replace(/-/g, '_');
+  };
+
   const runCode = async () => {
     if (!selectedEntry) return;
     
@@ -176,6 +181,8 @@ function AppContent() {
     setIsRunning(true);
     setTerminalOutput('Running...\n');
 
+    const normalizedName = normalizeEntryName(entry.name);
+
     try {
       const response = await fetch('http://localhost:3001/run', {
         method: 'POST',
@@ -185,7 +192,7 @@ function AppContent() {
         body: JSON.stringify({
           contractCode: entry.contractCode,
           testCode: entry.testCode,
-          entryName: entry.name
+          entryName: normalizedName
         }),
       });
 
