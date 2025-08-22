@@ -166,6 +166,12 @@ body {
   color: var(--text-primary);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .file-explorer.collapsed .file-explorer-header {
   justify-content: center;
   padding: 8px 4px;
@@ -180,7 +186,7 @@ body {
 .entry-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   padding: 8px 12px;
   margin-bottom: 4px;
   border-radius: 6px;
@@ -199,12 +205,12 @@ body {
 }
 
 .entry-name-input {
-  flex: 1;
   background: transparent;
   border: none;
   outline: none;
   font-size: 14px;
   color: inherit;
+  width: 100%;
 }
 
 .entry-item.selected .entry-name-input {
@@ -215,13 +221,18 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 2px 4px;
+  border-radius: 3px;
   font-size: 16px;
   line-height: 1;
   color: var(--text-secondary);
   opacity: 0;
   transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
 }
 
 .entry-item:hover .delete-btn {
@@ -241,6 +252,7 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 /* Delete confirmation dropdown */
@@ -322,21 +334,22 @@ body {
   }
 }
 
-.create-entry-btn {
-  margin: 8px;
-  padding: 12px;
-  background-color: var(--success-color);
-  color: white;
+.add-entry-btn {
+  background: none;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.15s;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  line-height: 1;
+  font-weight: bold;
 }
 
-.create-entry-btn:hover {
-  background-color: var(--success-hover);
+.add-entry-btn:hover {
+  background-color: var(--button-hover);
+  color: var(--text-primary);
 }
 
 /* Collapse buttons */

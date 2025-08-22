@@ -233,13 +233,20 @@ function AppContent() {
             >
               <div className="file-explorer-header">
                 {!sidebarCollapsed && <span>Files</span>}
-                <button 
-                  className="collapse-btn sidebar-collapse-btn"
-                  onClick={toggleSidebar}
-                  title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                >
-                  {sidebarCollapsed ? '»' : '«'}
-                </button>
+                <div className="header-actions">
+                  {!sidebarCollapsed && (
+                    <button onClick={createEntry} className="add-entry-btn" title="New Contract">
+                      +
+                    </button>
+                  )}
+                  <button 
+                    className="collapse-btn sidebar-collapse-btn"
+                    onClick={toggleSidebar}
+                    title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                  >
+                    {sidebarCollapsed ? '»' : '«'}
+                  </button>
+                </div>
               </div>
               
               {!sidebarCollapsed && (
@@ -304,11 +311,6 @@ function AppContent() {
                 </div>
               )}
               
-              {!sidebarCollapsed && (
-                <button onClick={createEntry} className="create-entry-btn">
-                  + New Contract
-                </button>
-              )}
             </div>
             
             

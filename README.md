@@ -107,7 +107,7 @@ The backend provides:
 
 ## TODO
 
-1. **Make it easier to deploy in production and test environments**
+1. **Make it easier to deploy the Playground in production and test environments**
    - Add Docker Compose configuration
    - Environment-specific configurations
    - CI/CD pipeline setup
@@ -119,45 +119,44 @@ The backend provides:
    - Contract-specific linting rules
    - Real-time error highlighting
 
-3. **Autocomplete on the code editor**
-   - Python language server integration
+3. **Code Quality Features**
+   - Python code formatting (Black/autopep8)
    - Hathor nanocontract API suggestions
    - Context-aware completions
    - Import statement auto-completion
+   - Linting integration (pylint, flake8)
+   - Code analysis and suggestions
 
 4. **Enhanced Error Handling**
    - Better error messages and formatting
    - Stack trace visualization
    - Error categorization (syntax, runtime, test failures)
 
-5. **Code Quality Features**
-   - Python code formatting (Black/autopep8)
-   - Linting integration (pylint, flake8)
-   - Code analysis and suggestions
-
-7. **Terminal Improvements**
+5. **Terminal Improvements**
    - Resizable terminal panel
    - Syntax highlighting for output
    - Clear terminal functionality
 
-8. **Template System**
+6. **Template System**
    - Pre-built contract templates
    - Boilerplate test file generation
    - Example projects gallery
+   - Add contract with basic imports and initialize method
+   - Add test file with basic imports and helper methods
 
-9. **Performance Optimizations**
+7. **Performance Optimizations**
    - Code editor virtualization for large files
    - Lazy loading of components
    - Optimized Docker container reuse
 
-10. **User Experience**
-    - Keyboard shortcuts
-    - Multi-tab support for contracts
+8. **User Experience**
+   - Keyboard shortcuts
+   - Multi-tab support for contracts
 
-11. **Advanced Features**
-    - Version control integration
-    - Contract deployment tools
-    - Contract verification tools
+9. **Advanced Features**
+   - Version control integration
+   - Contract deployment tools
+   - Contract verification tools
 
 
 ## License
