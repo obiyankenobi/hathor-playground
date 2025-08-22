@@ -512,6 +512,8 @@ body {
   font-weight: 600;
   font-size: 14px;
   transition: background-color 0.15s;
+  min-width: 140px;
+  text-align: center;
 }
 
 .run-button:hover:not(:disabled) {
@@ -519,9 +521,26 @@ body {
 }
 
 .run-button:disabled {
-  background-color: var(--text-secondary);
+  background-color: var(--success-color);
   cursor: not-allowed;
-  color: var(--text-secondary);
+  color: white;
+}
+
+/* Loading animation for RUN CODE button */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.5s infinite;
+  display: inline-block;
+  width: 20px;
+  text-align: left;
+}
+
+@keyframes loading-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+  100% { content: ''; }
 }
 
 .terminal-output {

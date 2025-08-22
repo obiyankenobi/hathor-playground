@@ -3,13 +3,7 @@ import Editor from '@monaco-editor/react';
 import './App.css';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import ThemeDropdown from './ThemeDropdown';
-
-interface Entry {
-  id: string;
-  name: string;
-  contractCode: string;
-  testCode: string;
-}
+import { defaultEntries, Entry } from './examples';
 
 function AppContent() {
   const { theme } = useTheme();
@@ -45,6 +39,10 @@ function AppContent() {
             : parsedEntries[0].id;
           setSelectedEntry(entryToSelect);
         }
+      } else {
+        // Load default example entries if no saved entries exist
+        setEntries(defaultEntries);
+        setSelectedEntry(defaultEntries[0].id);
       }
       
       if (savedActiveTab && (savedActiveTab === 'contract' || savedActiveTab === 'tests')) {
@@ -345,6 +343,8 @@ function AppContent() {
                     detectIndentation: false,
                     fontSize: 14,
                     fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                    scrollBeyondLastLine: false,
+                    padding: { top: 10, bottom: 10 },
                   }}
                 />
               </div>
@@ -357,9 +357,9 @@ function AppContent() {
               <button 
                 onClick={runCode} 
                 disabled={isRunning || !selectedEntry}
-                className="run-button"
+                className={`run-button ${isRunning ? 'loading-dots' : ''}`}
               >
-                {isRunning ? 'Running...' : 'RUN CODE'}
+{isRunning ? 'RUNNING' : 'RUN TESTS'}
               </button>
               
               <button 
