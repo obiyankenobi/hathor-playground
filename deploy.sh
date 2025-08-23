@@ -87,14 +87,29 @@ fi
 # Install backend dependencies
 log "Installing backend dependencies..."
 cd "$APP_DIR/backend"
-sudo -u "$USER" npm ci --only=production
+if [ -f "package-lock.json" ]; then
+    sudo -u "$USER" npm ci --omit=dev
+else
+    log "package-lock.json not found, running npm install..."
+    sudo -u "$USER" npm install --omit=dev
+fi
 
 # Build and install frontend
 log "Building and installing frontend..."
 cd "$APP_DIR/frontend"
-sudo -u "$USER" npm ci
+if [ -f "package-lock.json" ]; then
+    sudo -u "$USER" npm ci
+else
+    log "package-lock.json not found, running npm install..."
+    sudo -u "$USER" npm install
+fi
 sudo -u "$USER" npm run build
-sudo -u "$USER" npm install -g serve
+
+# Install serve globally if not already installed
+if ! command -v serve &> /dev/null; then
+    log "Installing serve globally..."
+    npm install -g serve
+fi
 
 # Create tmp directory for backend
 mkdir -p "$APP_DIR/backend/tmp"
