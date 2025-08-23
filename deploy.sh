@@ -69,7 +69,7 @@ if [ -d "$APP_DIR/.git" ]; then
     log "Updating existing repository..."
     cd "$APP_DIR"
     sudo -u "$USER" git fetch
-    sudo -u "$USER" git reset --hard origin/main
+    sudo -u "$USER" git reset --hard origin/master
     sudo -u "$USER" git clean -fd
 else
     log "Setting up repository..."
@@ -88,7 +88,12 @@ fi
 log "Installing backend dependencies..."
 cd "$APP_DIR/backend"
 if [ -f "package-lock.json" ]; then
-    sudo -u "$USER" npm ci --omit=dev
+    log "Trying npm ci first..."
+    if ! sudo -u "$USER" npm ci --omit=dev 2>/dev/null; then
+        log "npm ci failed, falling back to npm install..."
+        sudo -u "$USER" rm -f package-lock.json
+        sudo -u "$USER" npm install --omit=dev
+    fi
 else
     log "package-lock.json not found, running npm install..."
     sudo -u "$USER" npm install --omit=dev
@@ -98,7 +103,12 @@ fi
 log "Building and installing frontend..."
 cd "$APP_DIR/frontend"
 if [ -f "package-lock.json" ]; then
-    sudo -u "$USER" npm ci
+    log "Trying npm ci first..."
+    if ! sudo -u "$USER" npm ci 2>/dev/null; then
+        log "npm ci failed, falling back to npm install..."
+        sudo -u "$USER" rm -f package-lock.json
+        sudo -u "$USER" npm install
+    fi
 else
     log "package-lock.json not found, running npm install..."
     sudo -u "$USER" npm install
