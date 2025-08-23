@@ -68,8 +68,17 @@ chown "$USER:$GROUP" "$APP_DIR"
 if [ -d "$APP_DIR/.git" ]; then
     log "Updating existing repository..."
     cd "$APP_DIR"
-    sudo -u "$USER" git pull origin main
+    sudo -u "$USER" git fetch
+    sudo -u "$USER" git reset --hard origin/main
+    sudo -u "$USER" git clean -fd
 else
+    log "Setting up repository..."
+    if [ -d "$APP_DIR" ] && [ "$(ls -A $APP_DIR 2>/dev/null)" ]; then
+        warn "Directory $APP_DIR exists and is not empty. Backing up and cleaning..."
+        mv "$APP_DIR" "${APP_DIR}.backup.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+        mkdir -p "$APP_DIR"
+        chown "$USER:$GROUP" "$APP_DIR"
+    fi
     log "Cloning repository..."
     sudo -u "$USER" git clone "$REPO_URL" "$APP_DIR"
     cd "$APP_DIR"
