@@ -1,0 +1,32 @@
+[Unit]
+Description=Hathor Playground Frontend
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=hathor
+Group=hathor
+WorkingDirectory=/opt/hathor-playground/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/npx serve -s build -l 3000
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hathor-playground-frontend
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

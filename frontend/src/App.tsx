@@ -182,7 +182,8 @@ function AppContent() {
     const normalizedName = normalizeEntryName(entry.name);
 
     try {
-      const response = await fetch('http://localhost:3001/run', {
+      const apiUrl = process.env.NODE_ENV === 'production' ? '/run-test' : 'http://localhost:3001/run';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
