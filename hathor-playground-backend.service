@@ -21,7 +21,7 @@ SyslogIdentifier=hathor-playground-backend
 
 # Security settings
 NoNewPrivileges=true
-PrivateTmp=true
+# PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/opt/hathor-playground/backend/tmp /var/run/docker.sock
